@@ -1,42 +1,40 @@
-function MarkdownWidget(source, preview){
-  this.textSource = source;
-  this.preview = preview;
+MarkdownWidgetModel = function(){
 }
 
-MarkdownWidget.prototype.italics = function(text){
-  var wordsToBeItalic = [];
-  if (text.match(/[_]\w+[_]/ig) != null){
-    text.match(/[_]\w+[_]/ig).forEach(function(match){
-      wordsToBeItalic.push(match);
-    });
-  };
-
-  if (text.match(/[*]\w+[*]/ig) != null){
-    text.match(/[*]\w+[*]/ig).forEach(function(match){
-      wordsToBeItalic.push(match);
-    });
-  };
-  return wordsToBeItalic;
-
+MarkdownWidgetModel.prototype.processText = function(text){
+  return marked(text)
 }
 
-MarkdownWidget.prototype.bolds = function(text){
-  var wordsToBeBold = [];
-  if (text.match(/[*][*]\w+[*][*]/ig) != null){
-    text.match(/[*][*]\w+[*][*]/ig).forEach(function(match){
-      wordsToBeBold.push(match);
-    });
-  };
-  return wordsToBeBold;
-
+MarkdownWidgetController = function(model, view) {
+  this.model = model
+  this.view = view
+  this._bindEventListener();
 }
 
-MarkdownWidget.prototype.previewText = function(text){
-  this.bolds(text).forEach(function(word){
-    text = text.replace(word, "<b>"+word.substr(2, word.length-4)+"</b>")
-  });
-  this.italics(text).forEach(function(word){
-    text = text.replace(word, "<i>"+word.substr(1, word.length-2)+"</i>")
-  });
-  return text;
+MarkdownWidgetController.prototype._bindEventListener = function(event){
+  $(this.view.sourceId).on('keyup', function(){
+    this.view.setText(this.model.processText(this.view.getText()))
+  }.bind(this))
 }
+
+MarkdownWidgetView = function(opts){
+  this.sourceId = opts.sourceId;
+  this.destinationId = opts.destinationId;
+}
+
+MarkdownWidgetView.prototype = {
+  getText: function(){
+    return $(this.sourceId).val();
+  },
+  setText: function(newText){
+    $(this.destinationId).html(newText)
+  }
+}
+
+
+MarkdownWidget = function(opts){
+  new MarkdownWidgetController(
+    new MarkdownWidgetModel(),
+    new MarkdownWidgetView(opts))
+}
+
