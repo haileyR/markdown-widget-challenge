@@ -1,54 +1,49 @@
-var Markdowner = function(){
-  this.rawText = "";
-  this.markdownHTML = "";
-  this.tagOpen = false;
-  this.glyphs = {
-    "*": "<em>",
-    "_": "<em>"
+function Markdowner(){
+  this.rawText = ""
+  this.markdownHTML = ""
+  this.openGlyphs = {
+    "<strong>" :/\*{2}/,
+    "<strong>":/_{2}/,
+    "<em>":/\*{1}/,
+    "<em>":/_{1}/,
+    "<h1>":/#{1}/
+  }
+  this.closeGlyphs = {
+    "</strong>": /\*{2}/,
+    "</strong>": /_{2}/,
+    "</em>": /\*{1}/,
+    "</em>": /_{1}/,
+    "</h1>": /\n/
   }
 }
 
 Markdowner.prototype = {
 
-  setText: function(){
-    this.rawText = $(".new_article textarea").val();
+  setText: function(text){
+    this.rawText = text
+    this.markdownHTML = text
   },
 
-  updateOutput: function(){
-    $(".new_article textarea").val(this.markdownHTML);
+  openTagReplace: function(){
+    var dictionary = this.openGlyphs
+    for(var glyph in dictionary){
+      this.markdownHTML = this.markdownHTML.replace(dictionary[glyph], glyph)
+    }
   },
 
-  closeTag: function(tag){
-    var closeTag = tag.split("");
-    closeTag.splice(1,0,"/");
-    return closeTag.join("");
+  closeTagReplace: function(){
+    var dictionary = this.closeGlyphs
+    for( var glyph in dictionary ){
+      this.markdownHTML = this.markdownHTML.replace( dictionary[glyph], glyph)
+    }
   },
 
-  transformText: function(){
-    setText();
 
   }
 }
 
-//  Markdowner
-//  1. Every KEYUP
-//    1a. CHECK TEXT against rawTEXT
-//      1a1. IF USER BACKSPACED MARKDOWN CHARACTER
-//        - REPLACE the LAST open HTML tag
-//        - UPDATE toggle
-//    1b. UPDATE rawText
-//    1c. CHECK for MARKDOWN GLYPH
-//      - IF GLYPH,
-//        - toggle tagOpen
-//  2. IF tagOpen EQUALS TRUE
-//    2a. RETURN to step 1
-//  3. IF tagOpen EQUALS FALSE
-//    3a. CAPTURE TEXT
-//    3b. SPLIT TEXT
-//    3c. LOCATE FIRST GLYPH
-//      3c1. REPLACE with HTML TAG
-//    3d. LOCATE FOLLOWING GLYPH
-//      3d1. REPLACE with CLOSING HTML TAG
-//    3e. JOIN TEXT
-//    3f. UPDATE markdownHTML
-//  4. UPDATE VIEW
+
+
+
+
+
