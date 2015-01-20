@@ -13,3 +13,14 @@
  *= require_tree .
  *= require_self
  */
+textarea{
+  width: 500px;
+  height: 700px;
+  padding: 30px;
+  font-size: 1em;
+}
+.markdown-preview {
+  width: 500px;
+  height: 700px;
+  padding: 30px;
+}

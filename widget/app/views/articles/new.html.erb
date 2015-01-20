@@ -1,6 +1,16 @@
-<%= form_for @article do |f| %>
-<%= f.text_area :body %>
-<%= f.submit %>
-<% end %>
-<div class="markdown-preview">
-</div>
+<table>
+  <tr>
+    <td>
+      <%= form_for @article do |f| %>
+      <%= f.text_area :body %>
+      <br>
+      <%= f.submit %>
+      <% end %>
+    </td>
+
+    <td>
+      <div class="markdown-preview">
+      </div>
+    </td>
+  </tr>
+</table>
