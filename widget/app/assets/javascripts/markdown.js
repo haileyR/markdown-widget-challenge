@@ -37,11 +37,30 @@ Markdowner.prototype = {
       this.markdownHTML = this.markdownHTML.replace( dictionary[glyph], glyph)
     }
   },
+}
+
+function MarkdownController(model, view){
+  this.model = model
+  this.view = view
+  this.userString = ""
+  this.htmlString = ""
+}
 
 
   }
+
+MarkdownController.prototype.transformText = function(view){
+  this.view.setText()
 }
 
+MarkdownController.prototype.doPreview = function(){
+  $(window).on("keyup", function(){
+    this.model.setText( this.view.$inputField.val() )
+    this.model.openTagReplace()
+    this.model.closeTagReplace()
+    this.view.updateOutput( this.model.markdownHTML )
+  }.bind(this))
+}
 
 
 
