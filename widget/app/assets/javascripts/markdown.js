@@ -46,7 +46,13 @@ function MarkdownController(model, view){
   this.htmlString = ""
 }
 
+function MarkdownView(inputField, outputDiv){
+  this.$inputField = $(inputField)
+  this.$outputDiv = $(outputDiv)
+}
 
+MarkdownView.prototype.updateOutput = function(text){
+    this.$outputDiv.html("<p>" + text + "</p>")
   }
 
 MarkdownController.prototype.transformText = function(view){
